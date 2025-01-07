@@ -4,16 +4,16 @@ import json
 import os
 import argparse
 
-from dataset.load_dataset import load_dataset_split, load_dataset
+from src.refusal_direction.dataset.load_dataset import load_dataset_split, load_dataset
 
-from pipeline.config import Config
-from pipeline.model_utils.model_factory import construct_model_base
-from pipeline.utils.hook_utils import get_activation_addition_input_pre_hook, get_all_direction_ablation_hooks
+from src.refusal_direction.pipeline.config import Config
+from src.refusal_direction.pipeline.model_utils.model_factory import construct_model_base
+from src.refusal_direction.pipeline.utils.hook_utils import get_activation_addition_input_pre_hook, get_all_direction_ablation_hooks
 
-from pipeline.submodules.generate_directions import generate_directions
-from pipeline.submodules.select_direction import select_direction, get_refusal_scores
-from pipeline.submodules.evaluate_jailbreak import evaluate_jailbreak
-from pipeline.submodules.evaluate_loss import evaluate_loss
+from src.refusal_direction.pipeline.submodules.generate_directions import generate_directions
+from src.refusal_direction.pipeline.submodules.select_direction import select_direction, get_refusal_scores
+from src.refusal_direction.pipeline.submodules.evaluate_jailbreak import evaluate_jailbreak
+from src.refusal_direction.pipeline.submodules.evaluate_loss import evaluate_loss
 
 def parse_arguments():
     """Parse model path argument from command line."""

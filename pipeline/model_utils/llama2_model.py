@@ -7,8 +7,8 @@ from typing import List
 from torch import Tensor
 from jaxtyping import Int, Float
 
-from pipeline.utils.utils import get_orthogonalized_matrix
-from pipeline.model_utils.model_base import ModelBase
+from src.refusal_direction.pipeline.utils.utils import get_orthogonalized_matrix
+from src.refusal_direction.pipeline.model_utils.model_base import ModelBase
 
 # Llama 2 chat templates are based on
 # - https://github.com/centerforaisafety/HarmBench/blob/main/baselines/model_utils.py

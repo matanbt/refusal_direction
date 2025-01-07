@@ -4,7 +4,7 @@ from tqdm import tqdm
 from torch import Tensor
 from jaxtyping import Int, Float
 
-from pipeline.utils.hook_utils import add_hooks
+from src.refusal_direction.pipeline.utils.hook_utils import add_hooks
 
 class ModelBase(ABC):
     def __init__(self, model_name_or_path: str):

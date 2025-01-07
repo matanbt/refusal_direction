@@ -6,8 +6,8 @@ from jaxtyping import Float
 from torch import Tensor
 from tqdm import tqdm
 
-from pipeline.utils.hook_utils import add_hooks
-from pipeline.model_utils.model_base import ModelBase
+from src.refusal_direction.pipeline.utils.hook_utils import add_hooks
+from src.refusal_direction.pipeline.model_utils.model_base import ModelBase
 
 def get_mean_activations_pre_hook(layer, cache: Float[Tensor, "pos layer d_model"], n_samples, positions: List[int]):
     def hook_fn(module, input):

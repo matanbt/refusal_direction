@@ -8,8 +8,8 @@ from typing import List
 from torch import Tensor
 from jaxtyping import Int, Float
 
-from pipeline.utils.utils import get_orthogonalized_matrix
-from pipeline.model_utils.model_base import ModelBase
+from src.refusal_direction.pipeline.utils.utils import get_orthogonalized_matrix
+from src.refusal_direction.pipeline.model_utils.model_base import ModelBase
 
 # Qwen chat templates are based on
 # - Official examples from Qwen repo: https://github.com/QwenLM/Qwen/blob/5aa84bdfd3237b37f01bc88cd49b3279b9a71d0b/examples/vllm_wrapper.py#L32

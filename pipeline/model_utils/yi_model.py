@@ -7,8 +7,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from typing import List
 from jaxtyping import Float
 
-from pipeline.utils.utils import get_orthogonalized_matrix
-from pipeline.model_utils.model_base import ModelBase
+from src.refusal_direction.pipeline.utils.utils import get_orthogonalized_matrix
+from src.refusal_direction.pipeline.model_utils.model_base import ModelBase
 
 # Yi chat templates are based on
 # - Official tokenizer config: https://huggingface.co/01-ai/Yi-6B-Chat/blob/main/tokenizer_config.json

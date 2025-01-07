@@ -7,8 +7,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from typing import List
 from jaxtyping import Float
 
-from pipeline.utils.utils import get_orthogonalized_matrix
-from pipeline.model_utils.model_base import ModelBase
+from src.refusal_direction.pipeline.utils.utils import get_orthogonalized_matrix
+from src.refusal_direction.pipeline.model_utils.model_base import ModelBase
 
 # Gemma chat template is based on
 # - Official Gemma documentation: https://ai.google.dev/gemma/docs/formatting
