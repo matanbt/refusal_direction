@@ -15,7 +15,8 @@ class Config:
     filter_val: bool = True
     evaluation_datasets: Tuple[str] = ("jailbreakbench",)
     max_new_tokens: int = 512
-    jailbreak_eval_methodologies: Tuple[str] = ("substring_matching", "llamaguard2")
+    # jailbreak_eval_methodologies: Tuple[str] = ("substring_matching", "llamaguard2")  # DEPRECATED
+    jailbreak_eval_methodologies: Tuple[str] = ("string_matching", "strongreject_finetuned") #, "harmbench")   # from StrongReject's evaluators
     refusal_eval_methodologies: Tuple[str] = ("substring_matching",)
     ce_loss_batch_size: int = 2
     ce_loss_n_batches: int = 2048

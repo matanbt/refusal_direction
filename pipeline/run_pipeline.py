@@ -4,6 +4,8 @@ import json
 import os
 import argparse
 
+from datasets import Dataset
+
 from src.refusal_direction.dataset.load_dataset import load_dataset_split, load_dataset
 
 from src.refusal_direction.pipeline.config import Config
@@ -12,7 +14,6 @@ from src.refusal_direction.pipeline.utils.hook_utils import get_activation_addit
 
 from src.refusal_direction.pipeline.submodules.generate_directions import generate_directions
 from src.refusal_direction.pipeline.submodules.select_direction import select_direction, get_refusal_scores
-from src.refusal_direction.pipeline.submodules.evaluate_jailbreak import evaluate_jailbreak
 from src.refusal_direction.pipeline.submodules.evaluate_loss import evaluate_loss
 
 def parse_arguments():
@@ -112,11 +113,32 @@ def evaluate_completions_and_save_results_for_dataset(cfg, intervention_label, d
     with open(os.path.join(cfg.artifact_path(), f'completions/{dataset_name}_{intervention_label}_completions.json'), 'r') as f:
         completions = json.load(f)
 
-    evaluation = evaluate_jailbreak(
-        completions=completions,
-        methodologies=eval_methodologies,
-        evaluation_path=os.path.join(cfg.artifact_path(), "completions", f"{dataset_name}_{intervention_label}_evaluations.json"),
+    # Use StrongREJECT framework to evaluate jailbreak
+    completions_dataset = Dataset.from_list(completions)
+    completions_dataset = completions_dataset.rename_column('prompt', 'forbidden_prompt')
+    # completions_dataset = completions_dataset.add_column('id', list(range(len(completions_dataset))))
+
+    from strong_reject.evaluate import evaluate_dataset as _evaluate_dataset_jailbreakness
+    eval_jailbreakness = _evaluate_dataset_jailbreakness(
+        completions_dataset,
+        evaluators=eval_methodologies,
+        empty_model_cache=False,  # TODO DEBUG; currently off-loading harmbench's classifier fails.
     )
+    eval_jailbreakness = eval_jailbreakness.to_pandas()
+    eval_jailbreakness = eval_jailbreakness.pivot_table(index=["category", "forbidden_prompt", "response"], columns="evaluator", values="score").reset_index()
+    evaluation = {
+        "jailbreakness": eval_jailbreakness[eval_methodologies].mean(numeric_only=True).to_dict(),
+        "jailbreakness_per_category": eval_jailbreakness[eval_methodologies].groupby("category").mean(numeric_only=True).to_dict(),
+        "completions": eval_jailbreakness.to_dict(orient='records'),
+    }
+
+    # Original evluation:
+    # from src.refusal_direction.pipeline.submodules.evaluate_jailbreak import evaluate_jailbreak
+    # evaluation = evaluate_jailbreak(
+    #     completions=completions,
+    #     methodologies=eval_methodologies,
+    #     evaluation_path=os.path.join(cfg.artifact_path(), "completions", f"{dataset_name}_{intervention_label}_evaluations.json"),
+    # )
 
     with open(f'{cfg.artifact_path()}/completions/{dataset_name}_{intervention_label}_evaluations.json', "w") as f:
         json.dump(evaluation, f, indent=4)
