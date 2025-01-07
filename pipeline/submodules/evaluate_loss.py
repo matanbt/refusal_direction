@@ -4,8 +4,8 @@ import json
 
 from datasets import load_dataset
 
-from pipeline.utils.hook_utils import add_hooks
-from pipeline.model_utils.model_base import ModelBase
+from src.refusal_direction.pipeline.utils.hook_utils import add_hooks
+from src.refusal_direction.pipeline.model_utils.model_base import ModelBase
 
 def batch_iterator_chat_completions(dataset_instructions, dataset_outputs, tokenize_instructions_fn, batch_size, eoi_toks):
     it_instructions = iter(dataset_instructions)
