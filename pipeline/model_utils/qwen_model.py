@@ -29,6 +29,21 @@ QWEN_CHAT_TEMPLATE = """<|im_start|>user
 <|im_start|>assistant
 """
 
+QWEN_HF_CHAT_TEMPLATE = """{% if messages[0]['role'] == 'system' %}
+{{ messages[0]['content'] }}
+{% endif %}
+{% for message in messages %}
+{% if message['role'] == 'user' %}
+<|im_start|>user
+{{ message['content'] }}<|im_end|>
+{% elif message['role'] == 'assistant' %}
+<|im_start|>assistant
+{{ message['content'] }}<|im_end|>
+{% endif %}
+{% endfor %}
+{% if add_generation_prompt %}<|im_start|>assistant{% endif %}
+"""
+
 QWEN_REFUSAL_TOKS = [40, 2121] # ['I', 'As']
 
 def format_instruction_qwen_chat(
@@ -127,6 +142,7 @@ class QwenModel(ModelBase):
         tokenizer.padding_side = 'left'
         tokenizer.pad_token = '<|extra_0|>'
         tokenizer.pad_token_id = tokenizer.eod_id # See https://github.com/QwenLM/Qwen/blob/main/FAQ.md#tokenizer
+        tokenizer.chat_template = QWEN_HF_CHAT_TEMPLATE
 
         return tokenizer
 
