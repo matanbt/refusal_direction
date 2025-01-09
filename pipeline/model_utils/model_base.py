@@ -112,7 +112,7 @@ class ModelBase(ABC):
         generation_config = GenerationConfig(max_new_tokens=max_new_tokens, do_sample=False)  # greedy sampling
         generation_config.pad_token_id = self.tokenizer.pad_token_id
 
-        completions = []
+        responses = []
         # outputs = prefix_fillers or [None] * len(messages)  # TODO add prefix-force
 
         for i in tqdm(range(0, len(messages), batch_size)):
@@ -130,12 +130,9 @@ class ModelBase(ABC):
                 generation_toks = generation_toks[:, tokenized_instructions.input_ids.shape[-1]:]
 
                 for generation_idx, generation in enumerate(generation_toks):
-                    completions.append({
-                        'message': messages[i + generation_idx],
-                        'response': self.tokenizer.decode(generation, skip_special_tokens=True).strip()
-                    })
+                    responses.append(self.tokenizer.decode(generation, skip_special_tokens=True).strip())
 
-        return completions
+        return responses
 
     def get_residuals(self, messages):
         # TODO convert to transformer-lens
